@@ -13,12 +13,13 @@
   <artifactId>weixin-java-cp</artifactId>
   <name>WxJava - CP Java SDK</name>
   <description>微信企业号/企业微信 Java SDK</description>
+  <version>4.0.0-swj-SNAPSHOT</version>
 
   <dependencies>
     <dependency>
       <groupId>com.github.binarywang</groupId>
       <artifactId>weixin-java-common</artifactId>
-      <version>${project.version}</version>
+      <version>${parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.jodd</groupId>
@@ -133,6 +134,46 @@
         </plugins>
       </build>
 
+    </profile>
+
+    <profile>
+      <id>swj</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <distributionManagement>
+        <repository>
+          <id>maven-releases</id>
+          <name>Project Release</name>
+          <url>http://repo.3weijia.com/repository/maven-releases/</url>
+        </repository>
+
+        <snapshotRepository>
+          <id>maven-snapshots</id>
+          <name>Project SNAPSHOTS</name>
+          <url>http://repo.3weijia.com/repository/maven-snapshots/</url>
+        </snapshotRepository>
+      </distributionManagement>
+      <build>
+        <plugins>
+          <!-- 要将源码放上去，需要加入这个插件 -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <configuration>
+              <attach>true</attach>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>compile</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 
