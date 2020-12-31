@@ -1,8 +1,6 @@
 package me.chanjar.weixin.cp.api.impl;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +26,6 @@ import me.chanjar.weixin.cp.api.*;
 import me.chanjar.weixin.cp.bean.WxCpMaJsCode2SessionResult;
 import me.chanjar.weixin.cp.bean.WxCpProviderToken;
 import me.chanjar.weixin.cp.config.WxCpConfigStorage;
-import me.chanjar.weixin.cp.util.WxCpConfigHolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,8 +82,6 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
   private File tmpDirFile;
   private int retrySleepMillis = 1000;
   private int maxRetryTimes = 5;
-
-  private Map<String, WxCpConfigStorage> configMap;
 
   @Override
   public boolean checkSignature(String msgSignature, String timestamp, String nonce, String data) {
@@ -335,74 +330,8 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
 
   @Override
   public void setWxCpConfigStorage(WxCpConfigStorage wxConfigProvider) {
-    final String corpId = wxConfigProvider.getCorpId();
-    this.setMultiConfigs(ImmutableMap.of(corpId, wxConfigProvider), corpId);
-  }
-
-  public void setMultiConfigs(Map<String, WxCpConfigStorage> configs) {
-    this.setMultiConfigs(configs, configs.keySet().iterator().next());
-  }
-
-  public void setMultiConfigs(Map<String, WxCpConfigStorage> configs, String defaultCorpId) {
-    this.configMap = Maps.newHashMap(configs);
-    WxCpConfigHolder.set(defaultCorpId);
+    this.configStorage = wxConfigProvider;
     this.initHttp();
-  }
-
-  public void addConfig(String corpId, WxCpConfigStorage configStorages) {
-    synchronized (this) {
-      if (this.configMap == null) {
-        this.setWxCpConfigStorage(configStorages);
-      } else {
-        this.configMap.put(corpId, configStorages);
-      }
-    }
-  }
-
-  public WxCpConfigStorage getWxCpConfig() {
-    if (this.configMap.size() == 1) {
-      // 只有一个小程序，直接返回其配置即可
-      return this.configMap.values().iterator().next();
-    }
-
-    return this.configMap.get(WxCpConfigHolder.get());
-  }
-
-  public void removeConfig(String corpId) {
-    synchronized (this) {
-      if (this.configMap.size() == 1) {
-        this.configMap.remove(corpId);
-        log.warn("已删除最后一个企业微信配置：{}，须立即使用setWxCpConfig或setMultiConfigs添加配置", corpId);
-        return;
-      }
-      if (WxCpConfigHolder.get().equals(corpId)) {
-        this.configMap.remove(corpId);
-        final String defaultMpId = this.configMap.keySet().iterator().next();
-        WxCpConfigHolder.set(defaultMpId);
-        log.warn("已删除默认企业微信配置，企业微信【{}】被设为默认配置", defaultMpId);
-        return;
-      }
-      this.configMap.remove(corpId);
-    }
-  }
-
-  public WxCpService switchoverTo(String corpId) {
-    if (this.configMap.containsKey(corpId)) {
-      WxCpConfigHolder.set(corpId);
-      return this;
-    }
-
-    throw new WxRuntimeException(String.format("无法找到对应【%s】的企业微信配置信息，请核实！", corpId));
-  }
-
-  public boolean switchover(String corpId) {
-    if (this.configMap.containsKey(corpId)) {
-      WxCpConfigHolder.set(corpId);
-      return true;
-    }
-
-    log.error("无法找到对应【{}】的企业微信配置信息，请核实！", corpId);
-    return false;
   }
 
   @Override
