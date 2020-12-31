@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.error.WxRuntimeException;
 import me.chanjar.weixin.common.util.json.GsonParser;
+import me.chanjar.weixin.common.util.json.WxGsonBuilder;
 import me.chanjar.weixin.cp.api.WxCpOaService;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.bean.oa.*;
@@ -166,7 +167,7 @@ public class WxCpOaServiceImpl implements WxCpOaService {
   }
 
   @Override
-  public List<WxCpDialRecord> getDialRecord(Date startTime, Date endTime, Integer offset, Integer limit)
+  public List<WxCpDialRecord> getDialRecord(@NonNull Date startTime,@NonNull Date endTime, Integer offset, Integer limit)
     throws WxErrorException {
     JsonObject jsonObject = new JsonObject();
 
@@ -211,5 +212,48 @@ public class WxCpOaServiceImpl implements WxCpOaService {
     final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_TEMPLATE_DETAIL);
     String responseContent = this.mainService.post(url, jsonObject.toString());
     return WxCpGsonBuilder.create().fromJson(responseContent, WxCpTemplateResult.class);
+  }
+
+  @Override
+  public WxCpJournaluuidListResult getJournalUUidList(Date startTime, Date endTime, Integer cursor, Integer limit, List<WxCpJournaluuidQueryFilter> filters) throws WxErrorException {
+    JsonObject jsonObject = new JsonObject();
+    long endtimestamp = endTime.getTime() / 1000L;
+    long starttimestamp = startTime.getTime() / 1000L;
+
+    if (endtimestamp - starttimestamp < 0 || endtimestamp - starttimestamp >= MONTH_SECONDS) {
+      throw new WxRuntimeException("结束时间,开始时间和结束时间间隔不能超过一个月");
+    }
+    jsonObject.addProperty("starttime", starttimestamp);
+    jsonObject.addProperty("endtime", endtimestamp);
+    if (cursor == null || cursor < 0) {
+      cursor = 0;
+    }
+    jsonObject.addProperty("cursor", cursor);
+    if (limit == null || limit <= 0) {
+      limit = 100;
+    }
+    jsonObject.addProperty("limit", limit);
+    if (filters != null && !filters.isEmpty()) {
+      JsonArray filterJsonArray = new JsonArray();
+      for (WxCpJournaluuidQueryFilter filter : filters) {
+        filterJsonArray.add(new JsonParser().parse(filter.toJson()));
+      }
+      jsonObject.add("filters", filterJsonArray);
+    }
+    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_JOURNAL_RECORD_LIST);
+    String responseContent = this.mainService.post(url, jsonObject.toString());
+    return WxGsonBuilder.create().fromJson(responseContent, WxCpJournaluuidListResult.class);
+  }
+
+  @Override
+  public WxCpJournalDetail getJournalDetail(@NonNull String journaluuid) throws WxErrorException {
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("journaluuid", journaluuid);
+    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_JOURNAL_RECORD_DETAIL);
+    String responseContent = this.mainService.post(url, jsonObject.toString());
+    JsonObject tmpJson = GsonParser.parse(responseContent);
+    return WxGsonBuilder.create().fromJson(tmpJson.get("info"),
+      new TypeToken<WxCpJournalDetail>() {
+      }.getType());
   }
 }

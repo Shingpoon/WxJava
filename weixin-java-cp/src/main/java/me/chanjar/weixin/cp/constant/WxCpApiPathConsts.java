@@ -113,6 +113,10 @@ public final class WxCpApiPathConsts {
     public static final String CALENDAR_UPDATE = "/cgi-bin/oa/calendar/update";
     public static final String CALENDAR_GET = "/cgi-bin/oa/calendar/get";
     public static final String CALENDAR_DEL = "/cgi-bin/oa/calendar/del";
+
+    public static final String GET_JOURNAL_RECORD_LIST = "/cgi-bin/oa/journal/get_record_list";
+    public static final String GET_JOURNAL_RECORD_DETAIL = "/cgi-bin/oa/journal/get_record_detail";
+    public static final String GET_JOURNAL_STAT_LIST = "/cgi-bin/oa/journal/get_stat_list";
   }
 
   @UtilityClass

@@ -14,6 +14,8 @@ import me.chanjar.weixin.cp.bean.WxCpMaJsCode2SessionResult;
 import me.chanjar.weixin.cp.bean.WxCpProviderToken;
 import me.chanjar.weixin.cp.config.WxCpConfigStorage;
 
+import java.util.Map;
+
 /**
  * 微信API的Service.
  *
@@ -290,6 +292,49 @@ public interface WxCpService extends WxService {
   void setWxCpConfigStorage(WxCpConfigStorage wxConfigProvider);
 
   /**
+   * 注入多个 {@link WxCpConfigStorage} 的实现
+   *
+   * @param wxConfigProviders 配置对象
+   */
+  void setMultiConfigs(Map<String, WxCpConfigStorage> wxConfigProviders);
+
+  /**
+   * 注入多个 {@link WxCpConfigStorage} 的实现
+   *
+   * @param wxConfigProviders 配置对象
+   * @param defaultCorpId 默认id
+   */
+  void setMultiConfigs(Map<String, WxCpConfigStorage> wxConfigProviders, String defaultCorpId);
+
+  /**
+   * 增加 {@link WxCpConfigStorage}
+   * @param corpId 企业id
+   * @param configStorages 企业配置
+   */
+  void addConfig(String corpId, WxCpConfigStorage configStorages);
+
+  /**
+   * 删除配置
+   * @param corpId 企业id
+   */
+  void removeConfig(String corpId);
+
+  /**
+   * 切换到企业并返回当前对象
+   * @param corpId 企业id
+   * @return .
+   */
+  WxCpService switchoverTo(String corpId);
+
+  /**
+   * 切换到企业
+   * @param corpId 企业id
+   * @return .
+   */
+  boolean switchover(String corpId);
+
+  /**
+   *
    * 获取部门相关接口的服务类对象
    *
    * @return the department service
@@ -442,5 +487,4 @@ public interface WxCpService extends WxService {
    * @param tagService the tag service
    */
   void setTagService(WxCpTagService tagService);
-
 }

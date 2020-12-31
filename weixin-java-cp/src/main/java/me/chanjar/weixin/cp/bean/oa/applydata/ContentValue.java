@@ -37,6 +37,13 @@ public class ContentValue implements Serializable {
 
   private Attendance attendance;
 
+  @SerializedName("date_range")
+  private DateRange dateRange;
+
+  private Location location;
+
+  private Formula formula;
+
   @Data
   public static class Date implements Serializable {
     private static final long serialVersionUID = -6181554080062231138L;
@@ -100,21 +107,43 @@ public class ContentValue implements Serializable {
   public static class Attendance implements Serializable {
     private static final long serialVersionUID = -6627566040706594166L;
     @SerializedName("date_range")
-    private DataRange dateRange;
+    private DateRange dateRange;
     private Integer type;
 
-    @Data
-    public static class DataRange implements Serializable {
-      private static final long serialVersionUID = -3411836592583718255L;
-      private String type;
-      @SerializedName("new_begin")
-      private Long begin;
-      @SerializedName("new_end")
-      private Long end;
-      @SerializedName("new_duration")
-      private Long duration;
-    }
   }
 
+  @Data
+  public static class DateRange implements Serializable {
+    private static final long serialVersionUID = -3411836592583718255L;
+    private String type;
+    @SerializedName("new_begin")
+    private Long begin;
+    @SerializedName("new_end")
+    private Long end;
+    @SerializedName("new_duration")
+    private Long duration;
+  }
+
+  @Data
+  public static class Location implements Serializable {
+    /**	纬度，精确到6位小数*/
+    private Double latitude;
+    /** 经度，精确到6位小数*/
+    private Double longitude;
+    /** 地点标题*/
+    private String title;
+    /** 地点详情地址 */
+    private String address;
+    /** 选择地点的时间*/
+    private Long time;
+
+  }
+
+  @Data
+  public static class Formula implements Serializable {
+    private static final long serialVersionUID = 1L;
+    /** 公式的值*/
+    private String value;
+  }
 
 }

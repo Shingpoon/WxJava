@@ -101,4 +101,29 @@ public class WxCpOaServiceImplTest {
   @Test
   public void testGetDialRecord() {
   }
+
+  @Test
+  public void testGetJournalUUidList() throws WxErrorException, ParseException {
+    Date startTime = DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.parse("2020-12-03");
+    Date endTime = DateFormatUtils.ISO_8601_EXTENDED_DATE_FORMAT.parse("2021-01-01");
+    WxCpJournaluuidListResult journalUUidList = wxService.getOaService().getJournalUUidList(startTime, endTime, 0, 100, null);
+
+    assertThat(journalUUidList).isNotNull();
+
+    System.out.println("result ");
+    System.out.println(gson.toJson(journalUUidList));
+  }
+
+  @Test
+  public void testGetJournalDetail() throws WxErrorException {
+    //5csL48kRfsLRD81vmkEsjXvo9ojSazEHQZrwPdpZxbnzq5Vgt4YmCtSK11gCbn8num
+    //5csL48kRfsLRD81vmkEsjXjKT9fEW9rJ6ETym484gVhsijQSbrx5asPc8YACTyKesM
+    // 5csL48kRfsLRD81vmkEsjXrrDPTwpz336ibPDMamnksPzP1rzL1d1sRk6767KxrCq9
+    WxCpJournalDetail journalDetail = wxService.getOaService().getJournalDetail("5csL48kRfsLRD81vmkEsjXrrDPTwpz336ibPDMamnksPzP1rzL1d1sRk6767KxrCq9");
+
+    assertThat(journalDetail).isNotNull();
+
+    System.out.println("result ");
+    System.out.println(gson.toJson(journalDetail));
+  }
 }

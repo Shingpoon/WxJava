@@ -132,4 +132,36 @@ public interface WxCpOaService {
    */
   WxCpTemplateResult getTemplateDetail(@NonNull String templateId) throws WxErrorException;
 
+  /**
+   * <pre>
+   *   批量获取汇报记录单号
+   *
+   *   企业可通过access_token调用本接口，以获取企业一段时间内企业微信“汇报应用”汇报记录编号，支持按汇报表单ID、申请人、部门等条件筛选。
+   *
+   *   API Doc : https://work.weixin.qq.com/api/doc/90000/90135/93393
+   * </pre>
+   * @param startTime 查询的起始时间戳
+   * @param endTime 查询的结束时间戳
+   * @param cursor 游标首次请求传0，非首次请求携带上一次请求返回的next_cursor - 默认0
+   * @param limit 拉取条数 - 默认100
+   * @param filters 过滤条件
+   * @return .
+   * @throws WxErrorException .
+   */
+  WxCpJournaluuidListResult getJournalUUidList(@NonNull Date startTime, @NonNull Date endTime, Integer cursor, Integer limit, List<WxCpJournaluuidQueryFilter> filters) throws WxErrorException;
+
+  /**
+   * <pre>
+   *     获取汇报记录详情
+   *
+   *     企业可通过access_token调用本接口，根据汇报记录单号查询企业微信“汇报应用”的汇报详情。
+   *
+   *     API Doc : https://work.weixin.qq.com/api/doc/90000/90135/93394
+   * </pre>
+   * @param journaluuid 汇报记录id
+   * @return .
+   * @throws WxErrorException .
+   */
+  WxCpJournalDetail getJournalDetail(@NonNull String journaluuid) throws WxErrorException;
+
 }
