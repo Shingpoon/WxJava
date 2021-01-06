@@ -13,7 +13,7 @@
   <artifactId>weixin-java-cp</artifactId>
   <name>WxJava - CP Java SDK</name>
   <description>微信企业号/企业微信 Java SDK</description>
-  <version>4.0.0-swj-SNAPSHOT</version>
+  <version>4.0.0-swj</version>
 
   <dependencies>
     <dependency>
