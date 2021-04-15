@@ -2,10 +2,10 @@ package me.chanjar.weixin.mp.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.chanjar.weixin.mp.bean.WxMpHostConfig;
+import me.chanjar.weixin.mp.config.WxMpHostConfig;
 import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 
-import static me.chanjar.weixin.mp.bean.WxMpHostConfig.*;
+import static me.chanjar.weixin.mp.config.WxMpHostConfig.*;
 
 /**
  * <pre>
@@ -280,9 +280,40 @@ public interface WxMpApiUrl {
      */
     SUBSCRIBE_MESSAGE_AUTHORIZE_URL(MP_DEFAULT_HOST_URL, "/mp/subscribemsg?action=get_confirm&appid=%s&scene=%d&template_id=%s&redirect_url=%s&reserved=%s#wechat_redirect"),
     /**
-     * subscribe.
+     * subscribe once.
      */
-    SEND_MESSAGE_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/template/subscribe");
+    SEND_MESSAGE_ONCE_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/template/subscribe"),
+    /**
+     * 订阅通知消息发送.
+     */
+    SEND_SUBSCRIBE_MESSAGE_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/subscribe/bizsend"),
+    /**
+     * 获取模板标题下的关键词列表.
+     */
+      GET_PUB_TEMPLATE_TITLE_LIST_URL (API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/getpubtemplatetitles"),
+    /**
+     * 获取模板标题下的关键词列表.
+     */
+      GET_PUB_TEMPLATE_KEY_WORDS_BY_ID_URL (API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/getpubtemplatekeywords"),
+    /**
+     * 组合模板并添加至帐号下的个人模板库.
+     */
+      TEMPLATE_ADD_URL(API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/addtemplate"),
+    /**
+     * 获取当前帐号下的个人模板列表.
+     */
+      TEMPLATE_LIST_URL(API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/gettemplate"),
+    /**
+     * 删除帐号下的某个模板.
+     */
+    TEMPLATE_DEL_URL(API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/deltemplate"),
+    /**
+     * 获取小程序账号的类目
+     */
+    GET_CATEGORY_URL (API_DEFAULT_HOST_URL,  "/wxaapi/newtmpl/getcategory"),
+    UNIFORM_MSG_SEND_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/wxopen/template/uniform_send"),
+    ACTIVITY_ID_CREATE_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/wxopen/activityid/create"),
+    UPDATABLE_MSG_SEND_URL(API_DEFAULT_HOST_URL, "/cgi-bin/message/wxopen/updatablemsg/send");
 
     private final String prefix;
     private final String path;
@@ -1098,6 +1129,26 @@ public interface WxMpApiUrl {
      * 获取关联商户
      */
     GET_PAY_MCH_SET_BIZ_ATTR(API_DEFAULT_HOST_URL, "/card/invoice/setbizattr?action=get_pay_mch"),
+
+    /**
+     * 报销方查询报销发票信息
+     */
+    GET_INVOICE_INFO(API_DEFAULT_HOST_URL,"/card/invoice/reimburse/getinvoiceinfo"),
+
+    /**
+     * 报销方批量查询报销发票信息
+     */
+    GET_INVOICE_BATCH(API_DEFAULT_HOST_URL,"/card/invoice/reimburse/getinvoicebatch"),
+
+    /**
+     * 报销方更新发票状态
+     */
+    UPDATE_INVOICE_STATUS(API_DEFAULT_HOST_URL,"/card/invoice/reimburse/updateinvoicestatus"),
+
+    /**
+     * 报销方批量更新发票状态
+     */
+    UPDATE_STATUS_BATCH(API_DEFAULT_HOST_URL,"/card/invoice/reimburse/updatestatusbatch"),
     ;
     private final String prefix;
     private final String path;

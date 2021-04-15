@@ -135,6 +135,7 @@ public interface WxMpService extends WxService {
    * @return 生成的短地址 string
    * @throws WxErrorException .
    */
+  @Deprecated
   String shortUrl(String longUrl) throws WxErrorException;
 
   /**
@@ -258,6 +259,16 @@ public interface WxMpService extends WxService {
    * @throws WxErrorException 异常
    */
   String post(WxMpApiUrl url, String postData) throws WxErrorException;
+
+  /**
+   * 当本Service没有实现某个API的时候，可以用这个，针对所有微信API中的POST请求.
+   *
+   * @param url      请求接口地址
+   * @param obj 请求参数
+   * @return 接口响应字符串 string
+   * @throws WxErrorException 异常
+   */
+  String post(WxMpApiUrl url, Object obj) throws WxErrorException;
 
   /**
    * 当本Service没有实现某个API的时候，可以用这个，针对所有微信API中的POST请求.
@@ -522,6 +533,18 @@ public interface WxMpService extends WxService {
    * @return WxImgProcService img proc service
    */
   WxImgProcService getImgProcService();
+
+  /**
+   * 返回电子发票报销方相关接口
+   * @return WxMpReimburseInvoiceService
+   */
+  WxMpReimburseInvoiceService getReimburseInvoiceService();
+
+  /**
+   * .
+   * @param reimburseInvoiceService .
+   */
+  void setReimburseInvoiceService(WxMpReimburseInvoiceService reimburseInvoiceService);
 
   /**
    * .

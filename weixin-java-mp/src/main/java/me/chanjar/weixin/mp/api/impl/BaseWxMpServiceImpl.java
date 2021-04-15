@@ -129,6 +129,10 @@ public abstract class BaseWxMpServiceImpl<H, P> implements WxMpService, RequestH
   @Setter
   private WxOAuth2Service oAuth2Service = new WxMpOAuth2ServiceImpl(this);
 
+  @Getter
+  @Setter
+  private WxMpReimburseInvoiceService reimburseInvoiceService = new WxMpReimburseInvoiceServiceImpl(this);
+
   private Map<String, WxMpConfigStorage> configStorageMap;
 
   private int retrySleepMillis = 1000;
@@ -285,6 +289,11 @@ public abstract class BaseWxMpServiceImpl<H, P> implements WxMpService, RequestH
   @Override
   public String post(WxMpApiUrl url, String postData) throws WxErrorException {
     return this.post(url.getUrl(this.getWxMpConfigStorage()), postData);
+  }
+
+  @Override
+  public String post(WxMpApiUrl url, Object obj) throws WxErrorException {
+    return this.execute(SimplePostRequestExecutor.create(this), url, WxGsonBuilder.create().toJson(obj));
   }
 
   @Override

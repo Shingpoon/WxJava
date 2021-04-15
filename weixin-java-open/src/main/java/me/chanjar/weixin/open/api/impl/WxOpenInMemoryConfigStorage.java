@@ -3,10 +3,11 @@ package me.chanjar.weixin.open.api.impl;
 
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import lombok.Data;
+import lombok.Getter;
 import me.chanjar.weixin.common.bean.WxAccessToken;
 import me.chanjar.weixin.common.enums.TicketType;
 import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
-import me.chanjar.weixin.mp.bean.WxMpHostConfig;
+import me.chanjar.weixin.mp.config.WxMpHostConfig;
 import me.chanjar.weixin.mp.config.WxMpConfigStorage;
 import me.chanjar.weixin.open.api.WxOpenConfigStorage;
 import me.chanjar.weixin.open.bean.WxOpenAuthorizerAccessToken;
@@ -229,15 +230,18 @@ public class WxOpenInMemoryConfigStorage implements WxOpenConfigStorage {
     updateToken(cardApiTickets, appId, cardApiTicket, expiresInSeconds);
   }
 
+  @Data
   private static class Token {
     private String token;
     private Long expiresTime;
   }
 
+  @Data
   private static class WxOpenInnerConfigStorage implements WxMpConfigStorage, WxMaConfig {
     private final WxOpenConfigStorage wxOpenConfigStorage;
     private final String appId;
     private WxMpHostConfig hostConfig;
+    private String apiHostUrl;
 
     /**
      * 小程序原始ID
