@@ -1,8 +1,9 @@
 package me.chanjar.weixin.open.api;
 
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
+import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.open.bean.WxOpenCreateResult;
 import me.chanjar.weixin.open.bean.WxOpenGetResult;
 import me.chanjar.weixin.open.bean.WxOpenMaCodeTemplate;
@@ -147,7 +148,9 @@ public interface WxOpenComponentService {
    *
    * @param appid .
    * @return . wx fast ma service by appid
+   * @deprecated 2021-06-23 本接口原有方法并非仅快速创建小程序的专用接口，普通小程序授权到第三方平台皆可使用，所以请使用 {@link WxOpenMaBasicService} 类替代。获取方法: WxOpenMaService.getBasicService()
    */
+  @Deprecated
   WxOpenFastMaService getWxFastMaServiceByAppid(String appid);
 
   /**
@@ -330,7 +333,10 @@ public interface WxOpenComponentService {
    * @param code  the code
    * @return the wx mp o auth 2 access token
    * @throws WxErrorException the wx error exception
+   * @see WxMpService#getOAuth2Service()
+   * @deprecated 2021-05-21: 已修正公众号相关接口,请使用:WxOpenCommpentService.getWxMpServiceByAppid(mpAppId).getOAuth2Service().getAccessToken(code)
    */
+  @Deprecated
   WxOAuth2AccessToken oauth2getAccessToken(String appid, String code) throws WxErrorException;
 
   /**
@@ -362,7 +368,10 @@ public interface WxOpenComponentService {
    * @param scope       the scope
    * @param state       the state
    * @return the string
+   * @see WxMpService#getOAuth2Service()
+   * @deprecated 2021-05-21: 已修正公众号相关接口,请使用:WxOpenCommpentService.getWxMpServiceByAppid(mpAppId).getOAuth2Service().buildAuthorizationUrl(redirectUri, scope, state)
    */
+  @Deprecated
   String oauth2buildAuthorizationUrl(String appid, String redirectUri, String scope, String state);
 
   /**
